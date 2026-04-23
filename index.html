@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Be Here Now">
+  <title>Be Here Now</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #gate {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .ring {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.4s ease, transform 0.15s ease;
+    }
+
+    #gate:active .ring {
+      border-color: rgba(255, 255, 255, 0.65);
+      transform: scale(0.93);
+    }
+
+    .ring-inner {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .label {
+      color: rgba(255, 255, 255, 0.18);
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+
+    #player {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+
+    #player.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #player iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="gate" onclick="enter()">
+    <div class="ring">
+      <div class="ring-inner"></div>
+    </div>
+    <span class="label">be here now</span>
+  </div>
+
+  <div id="player">
+    <iframe
+      id="yt"
+      allow="autoplay; fullscreen; encrypted-media"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <script>
+    const VIDEO_ID = '9LEdEFUnIbA';
+
+    function enter() {
+      const gate = document.getElementById('gate');
+      const player = document.getElementById('player');
+      const iframe = document.getElementById('yt');
+
+      const params = new URLSearchParams({
+        autoplay: 1,
+        controls: 0,
+        modestbranding: 1,
+        rel: 0,
+        playsinline: 1,
+        iv_load_policy: 3,
+      });
+
+      iframe.src = `https://www.youtube.com/embed/${VIDEO_ID}?${params}`;
+
+      gate.style.opacity = '0';
+      gate.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        gate.style.display = 'none';
+        player.classList.add('visible');
+      }, 400);
+    }
+  </script>
+
+</body>
+</html>
